@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
-from auth_app.api.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileViewSerializer, UserChangePasswordSerializer
+from auth_app.api.serializers import UserRegistrationSerializer, UserLoginSerializer, UserProfileViewSerializer, UserChangePasswordSerializer, UserResetPasswordSerializer, SendpasswordResetEmailSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 
@@ -50,3 +50,17 @@ class UserChangePasswordView(APIView):
 		serializer = UserChangePasswordSerializer(data= request.data, context={'user':request.user})
 		if serializer.is_valid(raise_exception=True):
 			return Response({'msg':'change password successfull'})
+
+class SendpasswordResetEmailView(APIView):
+	def post(self,request,format=None):
+		serializer = SendpasswordResetEmailSerializer(data = request.data)
+		if serializer.is_valid(raise_exception=True):
+			return Response({"msg":"password reset send check your email"})
+
+class UserResetPasswordView(APIView):
+	def post(self, request, uid, token, format=None):
+		serializer = UserResetPasswordSerializer(data=request.data, context={'uid':uid, 'token':token})
+		if serializer.is_valid(raise_exception=True):
+			return Response({"msg":"password reset successfully"})
+
+
