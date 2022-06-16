@@ -64,6 +64,12 @@ class SendpasswordResetEmailSerializer(serializers.Serializer):
 			token = PasswordResetTokenGenerator().make_token(user)
 			link = 'http://localhost:3000/api/reset/'+uid+'/'+token
 			print("uel", link)
+			body = "click the following link" + link
+			data = {
+			  'subject':'Reset your password',
+			  'body':body,
+			  'to_email':user.email
+			}
 			return value
 		else:
 			raise serializers.ValidationError('you are not registered')
